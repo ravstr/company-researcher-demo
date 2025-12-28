@@ -1,0 +1,32 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Next.js plugin for Netlify
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Function configuration
+# Note: Netlify Pro tier supports up to 26 seconds timeout
+# Free tier supports 10 seconds
+# Routes with maxDuration > 26 may need optimization or Pro tier
+[functions]
+  # Increase timeout for longer-running functions (Pro tier only)
+  # Free tier max is 10 seconds
+  timeout = 26
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Note: The @netlify/plugin-nextjs automatically handles routing
+# No manual redirects needed
+

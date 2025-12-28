@@ -48,7 +48,7 @@ Company Researcher is a free and open-source tool that helps you instantly under
 - **Search Engine**: [Exa.ai](https://exa.ai) - Web search API optimized for AI applications
 - **Frontend**: [Next.js](https://nextjs.org/docs) with App Router, [TailwindCSS](https://tailwindcss.com), TypeScript
 - **AI Integration**: [Vercel AI SDK](https://sdk.vercel.ai/docs/ai-sdk-core)
-- **Hosting**: [Vercel](https://vercel.com/)
+- **Hosting**: [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/) (see [NETLIFY_DEPLOYMENT.md](./NETLIFY_DEPLOYMENT.md) for Netlify setup)
 
 <br>
 

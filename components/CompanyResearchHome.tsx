@@ -803,7 +803,10 @@ export default function CompanyResearcher() {
 
         fetchTwitterProfile(domainName)
           .then((data) => setTwitterProfileText(data))
-          .catch((error) => setErrors(prev => ({ ...prev, twitter: error instanceof Error ? error.message : 'An error occurred with Twitter profile' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Twitter profile data not available:', error);
+          }),
 
         fetchYoutubeVideos(domainName)
           .then((data) => setYoutubeVideos(data))
@@ -811,43 +814,73 @@ export default function CompanyResearcher() {
 
         fetchRedditPosts(domainName)
           .then((data) => setRedditPosts(data))
-          .catch((error) => setErrors(prev => ({ ...prev, reddit: error instanceof Error ? error.message : 'An error occurred with Reddit posts' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Reddit data not available:', error);
+          }),
 
         fetchGitHubUrl(domainName)
           .then((url) => setGithubUrl(url))
-          .catch((error) => setErrors(prev => ({ ...prev, github: error instanceof Error ? error.message : 'An error occurred with GitHub' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('GitHub data not available:', error);
+          }),
 
         fetchFunding(domainName)
           .then((data) => setFundingData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, funding: error instanceof Error ? error.message : 'An error occurred with funding data' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Funding data not available:', error);
+          }),
 
         fetchFinancialReport(domainName)
           .then((data) => setFinancialReport(data))
-          .catch((error) => setErrors(prev => ({ ...prev, financial: error instanceof Error ? error.message : 'An error occurred with financial report' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Financial report not available:', error);
+          }),
 
         fetchTikTokProfile(domainName)
           .then((data) => setTiktokData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, tiktok: error instanceof Error ? error.message : 'An error occurred with TikTok profile' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('TikTok data not available:', error);
+          }),
 
         fetchWikipedia(domainName)
           .then((data) => setWikipediaData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, wikipedia: error instanceof Error ? error.message : 'An error occurred with Wikipedia data' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Wikipedia data not available:', error);
+          }),
 
         fetchCrunchbase(domainName)
           .then((data) => setCrunchbaseData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, crunchbase: error instanceof Error ? error.message : 'An error occurred with Crunchbase data' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Crunchbase data not available:', error);
+          }),
 
         fetchPitchbook(domainName)
           .then((data) => setPitchbookData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, pitchbook: error instanceof Error ? error.message : 'An error occurred with PitchBook data' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('PitchBook data not available:', error);
+          }),
 
         fetchTracxn(domainName)
           .then((data) => setTracxnData(data))
-          .catch((error) => setErrors(prev => ({ ...prev, tracxn: error instanceof Error ? error.message : 'An error occurred with Tracxn data' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Tracxn data not available:', error);
+          }),
 
         fetchFounders(domainName)
           .then((data) => setFounders(data))
-          .catch((error) => setErrors(prev => ({ ...prev, founders: error instanceof Error ? error.message : 'An error occurred with founders' })))
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('Founders data not available:', error);
+          })
       ];
 
       await Promise.allSettled(promises);
@@ -897,11 +930,35 @@ export default function CompanyResearcher() {
         </div>
       </form>
 
-      {Object.entries(errors).map(([key, message]) => (
-        <div key={key} className="mt-4 mb-4 p-3 bg-red-100 border border-red-400 text-red-700">
-          {message}
-        </div>
-      ))}
+      {Object.entries(errors)
+        .filter(([key, message]) => {
+          // Filter out optional data source errors - these are expected to fail sometimes
+          const optionalErrorMessages = [
+            'Failed to fetch funding data',
+            'Failed to fetch PitchBook data',
+            'Failed to fetch Reddit posts',
+            'Failed to fetch founders',
+            'Failed to fetch Tracxn data',
+            'Failed to fetch Twitter profile',
+            'Failed to fetch Wikipedia data',
+            'Failed to fetch GitHub URL',
+            'Failed to fetch GitHub',
+            'An error occurred with funding data',
+            'An error occurred with PitchBook data',
+            'An error occurred with Reddit posts',
+            'An error occurred with founders',
+            'An error occurred with Tracxn data',
+            'An error occurred with Twitter profile',
+            'An error occurred with Wikipedia data',
+            'An error occurred with GitHub'
+          ];
+          return !optionalErrorMessages.some(msg => message.includes(msg));
+        })
+        .map(([key, message]) => (
+          <div key={key} className="mt-4 mb-4 p-3 bg-red-100 border border-red-400 text-red-700">
+            {message}
+          </div>
+        ))}
 
       <div className="space-y-12">
         {/* Company Overview Section */}
