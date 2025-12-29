@@ -799,7 +799,10 @@ export default function CompanyResearcher() {
 
         fetchNews(domainName)
           .then((data) => setNews(data))
-          .catch((error) => setErrors(prev => ({ ...prev, news: error instanceof Error ? error.message : 'An error occurred with news' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('News data not available:', error);
+          }),
 
         fetchTwitterProfile(domainName)
           .then((data) => setTwitterProfileText(data))
@@ -810,7 +813,10 @@ export default function CompanyResearcher() {
 
         fetchYoutubeVideos(domainName)
           .then((data) => setYoutubeVideos(data))
-          .catch((error) => setErrors(prev => ({ ...prev, youtube: error instanceof Error ? error.message : 'An error occurred with YouTube videos' }))),
+          .catch((error) => {
+            // Silently fail for optional data sources - just log to console
+            console.log('YouTube videos not available:', error);
+          }),
 
         fetchRedditPosts(domainName)
           .then((data) => setRedditPosts(data))
@@ -943,6 +949,8 @@ export default function CompanyResearcher() {
             'Failed to fetch Wikipedia data',
             'Failed to fetch GitHub URL',
             'Failed to fetch GitHub',
+            'Failed to fetch YouTube videos',
+            'News research failed',
             'An error occurred with funding data',
             'An error occurred with PitchBook data',
             'An error occurred with Reddit posts',
@@ -950,7 +958,9 @@ export default function CompanyResearcher() {
             'An error occurred with Tracxn data',
             'An error occurred with Twitter profile',
             'An error occurred with Wikipedia data',
-            'An error occurred with GitHub'
+            'An error occurred with GitHub',
+            'An error occurred with YouTube videos',
+            'An error occurred with news'
           ];
           return !optionalErrorMessages.some(msg => message.includes(msg));
         })
@@ -1059,32 +1069,32 @@ export default function CompanyResearcher() {
 
         {/* Summary and Mind Map Section */}
         {(isGenerating || companySummary) && (
-              <div className="space-y-8 pt-12">
-                <div className="flex items-center">
-                  <h2 className="text-3xl font-medium mt-6">Summary and Mind Map</h2>
-                </div>
+          <div className="space-y-8 pt-12">
+            <div className="flex items-center">
+              <h2 className="text-3xl font-medium mt-6">Summary and Mind Map</h2>
+            </div>
 
-                {isGenerating && companySummary === null ? (
-                  <CompanySummarySkeleton />
-                ) : companySummary && (
-                  <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
-                    <CompanySummary summary={companySummary} />
-                  </div>
-                )}
-
-                {isGenerating && companyMap === null ? (
-                  <div className="hidden sm:block animate-pulse">
-                    <div className="h-64 bg-secondary-darkest rounded-lg flex items-center justify-center">
-                      <p className="text-gray-400 text-md">Loading...</p>
-                    </div>
-                  </div>
-                ) : companyMap && (
-                  <div className="hidden sm:block opacity-0 animate-fade-up [animation-delay:200ms]">
-                    <CompanyMindMap data={companyMap} />
-                  </div>
-                )}
+            {isGenerating && companySummary === null ? (
+              <CompanySummarySkeleton />
+            ) : companySummary && (
+              <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
+                <CompanySummary summary={companySummary} />
               </div>
             )}
+
+            {isGenerating && companyMap === null ? (
+              <div className="hidden sm:block animate-pulse">
+                <div className="h-64 bg-secondary-darkest rounded-lg flex items-center justify-center">
+                  <p className="text-gray-400 text-md">Loading...</p>
+                </div>
+              </div>
+            ) : companyMap && (
+              <div className="hidden sm:block opacity-0 animate-fade-up [animation-delay:200ms]">
+                <CompanyMindMap data={companyMap} />
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Company Socials Section */}
           <div className="space-y-16 pt-12">
