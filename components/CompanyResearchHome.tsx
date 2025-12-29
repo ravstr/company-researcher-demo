@@ -1049,6 +1049,22 @@ export default function CompanyResearcher() {
                 <WikipediaDisplay data={wikipediaData} websiteUrl={companyUrl} />
               </div>
             )}
+
+            {isGenerating && competitors === null ? (
+              <CompetitorsSkeleton />
+            ) : competitors && competitors.length > 0 && (
+              <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
+                <CompetitorsDisplay competitors={competitors} />
+              </div>
+            )}
+
+            {isGenerating && news === null ? (
+              <NewsSkeleton />
+            ) : news && news.length > 0 && (
+              <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
+                <NewsDisplay news={news} />
+              </div>
+            )}
           </div>
 
         {/* Summary and Mind Map Section */}
@@ -1080,24 +1096,6 @@ export default function CompanyResearcher() {
           </div>
         )}
 
-        {/* Competitors and News Section - After Summary */}
-        <div className="space-y-16 pt-12">
-          {isGenerating && competitors === null ? (
-            <CompetitorsSkeleton />
-          ) : competitors && competitors.length > 0 && (
-            <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
-              <CompetitorsDisplay competitors={competitors} />
-            </div>
-          )}
-
-          {isGenerating && news === null ? (
-            <NewsSkeleton />
-          ) : news && news.length > 0 && (
-            <div className="opacity-0 animate-fade-up [animation-delay:200ms]">
-              <NewsDisplay news={news} />
-            </div>
-          )}
-        </div>
 
         {/* Company Socials Section */}
           <div className="space-y-16 pt-12">
